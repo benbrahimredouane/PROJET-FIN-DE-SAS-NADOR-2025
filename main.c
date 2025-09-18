@@ -2,9 +2,14 @@
 #include <string.h>
 #include <ctype.h>
 
+
+
+
 #define MAX_TEXT 2000
 #define MAX_MOTS 500
 #define TAILLE_MOT 30
+
+
 
 typedef struct {
     char mot[TAILLE_MOT];
@@ -13,6 +18,10 @@ typedef struct {
 } Dictionnaire;
 
 
+
+
+
+void menu();
 void analyserTexte(char texte[], Dictionnaire dico[], int *nbMots);
 void afficherDico(Dictionnaire dico[], int nbMots);
 void rechercherMotExact(Dictionnaire dico[], int nbMots, char mot[]);
@@ -25,7 +34,10 @@ int estPalindrome(char mot[]);
 void palindromes(Dictionnaire dico[], int nbMots);
 void anagrammes(Dictionnaire dico[], int nbMots);
 void nuageDeMots(Dictionnaire dico[], int nbMots);
-void menu();
+
+
+
+
 
 int main() {
     char texte[MAX_TEXT];
@@ -38,9 +50,12 @@ int main() {
         getchar();
 
         if (choix == 1) {
+            do{
             printf("Saisir le texte:\n");
-            fgets(texte, MAX_TEXT, stdin);
+            fgets(texte, sizeof(texte), stdin);
             analyserTexte(texte, dico, &nbMots);
+            texte[strcspn(texte, "\n")] = '\0';
+            }while(texte[0] == '\0');
         } else if (choix == 2) {
             afficherDico(dico, nbMots);
         } else if (choix == 3) {
@@ -54,7 +69,7 @@ int main() {
             scanf("%s", mot);
             rechercherMotPartiel(dico, nbMots, mot);
         } else if (choix == 5) {
-            printf("1. Alphabétique\n2. Fréquence\n3. Longueur\nVotre choix: ");
+            printf("1. Alphabetique\n2. Frequence\n3. Longueur \n Votre choix: ");
             int t;
             scanf("%d", &t);
             if (t == 1) trierDicoAlpha(dico, nbMots);
@@ -67,10 +82,27 @@ int main() {
             anagrammes(dico, nbMots);
             nuageDeMots(dico, nbMots);
         }
+        else printf("invalide choix");
     } while (choix != 8);
 
     return 0;
 }
+
+
+void menu() {
+    printf("\n===== MENU =====\n");
+    printf("1. Saisir un texte et analyser\n");
+    printf("2. Afficher tous les mots\n");
+    printf("3. Rechercher un mot exact\n");
+    printf("4. Rechercher un mot partiel\n");
+    printf("5. Trier les mots\n");
+    printf("6. Statistiques globales\n");
+    printf("7. Analyses (Palindromes, Anagrammes, Nuage)\n");
+    printf("8. Quitter\n");
+    printf("Votre choix: ");
+}
+
+
 
 void analyserTexte(char texte[], Dictionnaire dico[], int *nbMots) {
     char mot[TAILLE_MOT];
@@ -102,6 +134,7 @@ void analyserTexte(char texte[], Dictionnaire dico[], int *nbMots) {
     }
 }
 
+
 void afficherDico(Dictionnaire dico[], int nbMots) {
     printf("\n--- Dictionnaire ---\n");
     for (int i = 0; i < nbMots; i++) {
@@ -109,15 +142,17 @@ void afficherDico(Dictionnaire dico[], int nbMots) {
     }
 }
 
+
 void rechercherMotExact(Dictionnaire dico[], int nbMots, char mot[]) {
     for (int i = 0; i < nbMots; i++) {
         if (strcmp(dico[i].mot, mot) == 0) {
-            printf("%s trouvé : %d fois, longueur %d\n", mot, dico[i].occurrences, dico[i].longueur);
+            printf("%s trouve : %d fois, longueur %d\n", mot, dico[i].occurrences, dico[i].longueur);
             return;
         }
     }
-    printf("%s non trouvé\n", mot);
+    printf("%s non trouve \n", mot);
 }
+
 
 void rechercherMotPartiel(Dictionnaire dico[], int nbMots, char mot[]) {
     printf("Mots contenant '%s':\n", mot);
@@ -139,6 +174,9 @@ void trierDicoAlpha(Dictionnaire dico[], int nbMots) {
         }
     }
 }
+
+
+
 void trierDicoFrequence(Dictionnaire dico[], int nbMots) {
     for (int i = 0; i < nbMots - 1; i++) {
         for (int j = i + 1; j < nbMots; j++) {
@@ -151,6 +189,8 @@ void trierDicoFrequence(Dictionnaire dico[], int nbMots) {
     }
 }
 
+
+
 void trierDicoLongueur(Dictionnaire dico[], int nbMots) {
     for (int i = 0; i < nbMots - 1; i++) {
         for (int j = i + 1; j < nbMots; j++) {
@@ -162,6 +202,9 @@ void trierDicoLongueur(Dictionnaire dico[], int nbMots) {
         }
     }
 }
+
+
+
 
 void statistiques(Dictionnaire dico[], int nbMots) {
     int total = 0, maxFreq = 0, minLen = 1000, maxLen = 0;
@@ -182,11 +225,16 @@ void statistiques(Dictionnaire dico[], int nbMots) {
             strcpy(motLong, dico[i].mot);
         }
     }
+    float taille;
+    for (int i = 0; i < nbMots; i++) {
+        taille+=dico[i].longueur;
+    }
 
     printf("\n--- Statistiques ---\n");
     printf("Total mots: %d\n", total);
     printf("Mots uniques: %d\n", nbMots);
-    printf("Mot le plus fréquent: %s (%d fois)\n", motFreq, maxFreq);
+    printf("la longueur moyenne est:  %0.3f\n",taille/total);
+    printf("Mot le plus frequent: %s (%d fois)\n", motFreq, maxFreq);
     printf("Mot le plus court: %s (%d lettres)\n", motCourt, minLen);
     printf("Mot le plus long: %s (%d lettres)\n", motLong, maxLen);
 }
@@ -238,18 +286,7 @@ void nuageDeMots(Dictionnaire dico[], int nbMots) {
         printf("\n");
     }
 }
-void menu() {
-    printf("\n===== MENU =====\n");
-    printf("1. Saisir un texte et analyser\n");
-    printf("2. Afficher tous les mots\n");
-    printf("3. Rechercher un mot exact\n");
-    printf("4. Rechercher un mot partiel\n");
-    printf("5. Trier les mots\n");
-    printf("6. Statistiques globales\n");
-    printf("7. Analyses (Palindromes, Anagrammes, Nuage)\n");
-    printf("8. Quitter\n");
-    printf("Votre choix: ");
-}
+
 
 
 
