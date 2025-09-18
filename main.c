@@ -258,6 +258,19 @@ void palindromes(Dictionnaire dico[], int nbMots) {
     }
 }
 
+
+void trierMot(char mot[]) {
+    int n = strlen(mot);
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (mot[i] > mot[j]) {
+                char tmp = mot[i];
+                mot[i] = mot[j];
+                mot[j] = tmp;
+            }
+        }
+    }
+}
 void anagrammes(Dictionnaire dico[], int nbMots) {
     printf("\n--- Anagrammes ---\n");
     for (int i = 0; i < nbMots; i++) {
@@ -266,12 +279,10 @@ void anagrammes(Dictionnaire dico[], int nbMots) {
                 char a[TAILLE_MOT], b[TAILLE_MOT];
                 strcpy(a, dico[i].mot);
                 strcpy(b, dico[j].mot);
-                for (int x = 0; x < strlen(a); x++) {
-                    for (int y = x + 1; y < strlen(a); y++) {
-                        if (a[x] > a[y]) { char tmp = a[x]; a[x] = a[y]; a[y] = tmp; }
-                        if (b[x] > b[y]) { char tmp = b[x]; b[x] = b[y]; b[y] = tmp; }
-                    }
-                }
+
+                trierMot(a);
+                trierMot(b);
+
                 if (strcmp(a, b) == 0) {
                     printf("%s <-> %s\n", dico[i].mot, dico[j].mot);
                 }
