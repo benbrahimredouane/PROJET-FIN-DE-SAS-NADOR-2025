@@ -32,6 +32,7 @@ void trierDicoLongueur(Dictionnaire dico[], int nbMots);
 void statistiques(Dictionnaire dico[], int nbMots);
 int estPalindrome(char mot[]);
 void palindromes(Dictionnaire dico[], int nbMots);
+void trierMot(char mot[]);
 void anagrammes(Dictionnaire dico[], int nbMots);
 void nuageDeMots(Dictionnaire dico[], int nbMots);
 
