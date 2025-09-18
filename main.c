@@ -82,6 +82,7 @@ int main() {
             anagrammes(dico, nbMots);
             nuageDeMots(dico, nbMots);
         }
+        else if (choix==8) printf(" ok! have a good day");
         else printf("invalide choix");
     } while (choix != 8);
 
